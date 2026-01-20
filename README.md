@@ -1,115 +1,108 @@
 # 🚀 Realtime AI Ops Platform
 
-> **A cloud‑native, event‑driven, AI‑augmented collaborative platform** built to demonstrate senior‑level mastery of **React / Next.js**, **distributed systems**, **cloud infrastructure**, and **modern data & AI architectures**.
+> **A cloud-native, event-driven, AI-augmented realtime platform** built to demonstrate **senior-level engineering decisions** across **React / Next.js**, **backend architecture**, **distributed systems**, and **modern cloud & AI tooling**.
 
-This project is intentionally designed as a **CV‑grade showcase**: every technology is introduced for a *clear architectural reason*, not for decoration.
+This project is intentionally designed as a **CV-grade showcase**.
+Every technology is introduced for a **clear architectural reason**, at the moment where it becomes **necessary**, not fashionable.
 
 ---
 
 ## 🎯 Project Vision
 
-The Realtime AI Ops Platform is a **collaborative dashboard** where multiple users can manage operational items (tickets, incidents, deals, auctions, etc.) **in real time**, with:
+Realtime AI Ops Platform is a **collaborative realtime dashboard** where multiple users interact with shared operational entities (incidents, tasks, auctions, tickets, etc.) with:
 
-* Highly performant React UI
-* Real‑time collaboration & optimistic updates
-* Event‑driven backend architecture
-* Cloud‑native deployment (Kubernetes)
-* AI‑powered assistance (summaries, prioritization, ChatOps)
+* Low-latency UI updates
+* Optimistic interactions & rollback
+* Event-driven backend coordination
+* Cloud-native scalability
+* AI-assisted analysis & summarization
 
-The goal is not the business domain itself, but to demonstrate **how to build complex systems cleanly and incrementally**.
+The business domain is intentionally generic — the goal is to demonstrate **how to design, evolve, and justify complex systems**.
 
 ---
 
 ## 🧠 Architectural Principles
 
-* **Progressive complexity** → no premature over‑engineering
-* **Separation of responsibilities** (rendering, data orchestration, events)
-* **Event‑driven by necessity**, not by fashion
-* **AI as an augmentation layer**, not a core dependency
-* **Production‑grade patterns**, even in a personal project
+* **Progressive complexity** → no premature abstractions
+* **Clear boundaries** between rendering, orchestration, and domain logic
+* **Event-driven only when coordination requires it**
+* **AI as an augmentation layer**, never as a source of truth
+* **Production-grade patterns**, even in a personal project
 
 ---
 
 ## 🧩 Core Features
 
-* Authentication & role‑based permissions (Admin / Operator / Viewer)
-* Real‑time collaborative updates (WebSockets)
-* Large‑scale data tables (virtualization, memoization)
-* Complex dynamic forms (validation, undo/redo, drafts)
+* Authentication & RBAC (Admin / Operator / Viewer)
+* Realtime collaboration via WebSockets
 * Optimistic UI with rollback
 * Event sourcing & audit logs
-* AI‑generated summaries, suggestions & internal assistant
-* Observability, resilience & fault tolerance
+* Scalable data tables & complex forms
+* AI-generated summaries, prioritization & ChatOps assistant
+* Observability, error tracking & metrics
 
 ---
 
-## 🏗️ High‑Level Architecture
+## 🏗️ High-Level Architecture
 
 ```
-┌──────────────────────┐
-│  Next.js / React UI  │
-│  (SSR + Client)      │
-└──────────┬───────────┘
-           │ HTTPS / WS
-┌──────────▼───────────┐
-│   API Gateway        │
-│ (Fastify / Go)       │
-└──────────┬───────────┘
-           │ Events
-┌──────────▼───────────┐
-│       Kafka          │◄────────┐
-└──────────┬───────────┘         │
-           │                     │
-┌──────────▼───────────┐   ┌─────▼─────────┐
-│ Core Backend Service │   │ AI Service     │
-│ (Domain + DB)        │   │ (LLM / RAG)    │
-└──────────┬───────────┘   └────────────────┘
-           │
-┌──────────▼───────────┐
-│   PostgreSQL / DB    │
-└──────────────────────┘
+Users
+  ↓ HTTPS / WebSocket
+Next.js App (React, App Router)
+  ↕ TanStack Query (server-state orchestration)
+Fastify API (Node.js)
+  ↔ AWS Cognito (Auth)
+  ↔ Kafka (Event streaming)
+  ↔ Redis (cache / streams)
+  ↔ PostgreSQL (Aurora-compatible)
+  ↔ AI Service (OpenAI / Azure OpenAI)
 
-Infra: Kubernetes (EKS / AKS), Helm, Terraform, GitOps
+Infra
+  Docker / Docker Compose (local)
+  Kubernetes (EKS)
+  CI/CD (GitHub Actions)
+  Observability (Sentry, Prometheus, Grafana)
 ```
 
 ---
 
-## 🧠 Technology Choices & Justifications
+## 🧠 Technology Choices & Rationale
 
 ### ⚛️ Next.js (App Router)
 
+**Role**: Rendering & delivery
+
 **Why**:
 
-* Server‑Side Rendering & streaming for fast initial load
-* Clear separation between **server components** and **client logic**
-* Industry standard for modern React applications
+* Server-Side Rendering & streaming
+* Clear separation between server and client components
+* Industry standard for modern React
 
-**What it is *not* used for**:
+**Explicit non-goals**:
 
-* Client‑side data orchestration
-* Mutation management
+* Managing async data lifecycles
+* Handling realtime cache evolution
 
-Next.js handles **rendering and delivery**, not data lifecycle complexity.
+> Next.js renders data — it does not orchestrate how data changes over time.
 
 ---
 
 ### 🔄 TanStack Query
 
-**Why**:
-TanStack Query is used as a **client‑side asynchronous state orchestrator**.
+**Role**: Client-side async state orchestrator
 
-It solves problems that Next.js intentionally does not:
+**Why**:
 
 * Cache normalization & invalidation
 * Optimistic updates & rollback
-* Retry strategies & background refetch
-* Real‑time cache updates from WebSockets / Kafka
+* Background refetch & retry strategies
+* Seamless integration with WebSockets & events
 
-**Design decision**:
+**Key design decision**:
 
-> Next.js renders data, TanStack Query manages how data evolves over time.
+> Next.js handles *where* data comes from, TanStack Query handles *how it evolves*.
 
-This distinction is crucial in collaborative, real‑time systems.
+This separation is critical for collaborative, realtime systems.
 
 ---
 
@@ -117,72 +110,93 @@ This distinction is crucial in collaborative, real‑time systems.
 
 **Why**:
 
-* Composable, unopinionated components
-* Full control over markup and styling
-* Built on Radix (accessibility by default)
-* Extremely popular in modern Next.js ecosystems
+* Fully composable & unopinionated
+* Direct access to markup
+* Accessibility via Radix
+* Perfect fit for modern Next.js apps
 
-This avoids the rigidity of heavy UI frameworks while remaining production‑ready.
+Avoids the rigidity of heavy UI frameworks while remaining production-ready.
 
 ---
 
-### 🧩 Backend (Fastify / Go Fiber)
+### 🧩 Backend — Fastify (Node.js)
 
 **Why**:
 
-* Lightweight, high‑performance HTTP layer
-* Clear domain modeling
-* Easy migration from monolith → services
+* High performance, low overhead
+* Excellent plugin system
+* Native WebSocket support
+* Easy Kafka & Redis integration
 
-The backend starts **simple by design**, and evolves only when required.
-
----
-
-### 🔄 Kafka (Event‑Driven Architecture)
-
-**Why Kafka is *not* introduced on day one**:
-
-* Early stages only require request/response
-* Premature event systems increase cognitive load
-
-**Why Kafka *is* introduced later**:
-
-* Multiple consumers (notifications, analytics, AI)
-* Auditability & replayability
-* Decoupling between core domain and side effects
-
-Kafka appears when **coordination becomes the bottleneck**.
+The backend intentionally starts as a **modular monolith**, with clear boundaries allowing future extraction.
 
 ---
 
-### ☁️ Kubernetes (EKS / AKS)
+### 🔐 Authentication — AWS Cognito
 
-**Why later in the roadmap**:
+**Why**:
 
-* Local Docker is sufficient early
-* Kubernetes adds value only when topology stabilizes
+* OAuth2 / JWT / refresh tokens
+* Enterprise-grade identity management
+* Simple Fastify integration
 
-**Why Kubernetes at all**:
-
-* Industry‑standard orchestration
-* Horizontal scalability
-* Realistic production setup
+Auth is introduced **after core flows exist**, avoiding early complexity.
 
 ---
 
-### 🤖 AI Layer (LLMs + RAG)
+### 🔄 Event-Driven Layer — Kafka
 
-**Role of AI in the system**:
+**Why Kafka is introduced later**:
 
-* Generate summaries from events
-* Suggest priorities or assignments
+* Early stages only need request/response
+* Event systems add cognitive overhead
+
+**Why Kafka becomes necessary**:
+
+* Multiple consumers (notifications, AI, analytics)
+* Replayability & audit logs
+* Loose coupling between domain and side effects
+
+Kafka appears **when coordination becomes the bottleneck**.
+
+---
+
+### 🗄️ Data Layer — PostgreSQL
+
+**Why**:
+
+* Clear relational modeling
+* Easy local development
+* Aurora-compatible for production
+
+Avoids early cloud lock-in while remaining realistic.
+
+---
+
+### 🤖 AI Layer
+
+**Purpose**:
+
+* Summarize event streams
+* Detect anomalies
+* Suggest prioritization
 * Provide internal ChatOps assistant
 
-**Design principle**:
+**Key rule**:
 
-> AI consumes events, it does not own business logic.
+> AI consumes events — it never owns business logic.
 
-This keeps the system deterministic, testable, and resilient.
+This ensures determinism, debuggability, and trust.
+
+---
+
+### 📈 Observability
+
+* **Sentry** → frontend & backend error tracking
+* **Prometheus + Grafana** → metrics & system health
+* **Structured logs** → debugging & audits
+
+Observability is treated as a **first-class feature**.
 
 ---
 
@@ -191,69 +205,70 @@ This keeps the system deterministic, testable, and resilient.
 ### 🥇 Milestone 1 — Frontend Foundation
 
 * Next.js App Router
-* UI skeleton & design system
-* Mocked data & fake latency
+* shadcn/ui + design system
+* TanStack Query
+* Mock APIs & fake latency
 
 ### 🥈 Milestone 2 — Backend Core
 
-* REST / gRPC API
+* Fastify API
 * PostgreSQL
 * RBAC & permissions
 
-### 🥉 Milestone 3 — Real‑Time Collaboration
+### 🥉 Milestone 3 — Realtime Layer
 
 * WebSockets
 * Optimistic UI
 * Conflict awareness
 
-### 🏅 Milestone 4 — Event‑Driven Layer
+### 🏅 Milestone 4 — Event-Driven Architecture
 
 * Kafka topics & consumers
 * Audit logs
-* Decoupled side effects
+* Side-effect isolation
 
 ### 🧠 Milestone 5 — AI Integration
 
 * LLM service
-* Summaries & suggestions
-* Chat assistant
+* Event summaries
+* ChatOps assistant
 
-### ☁️ Milestone 6 — Cloud & Infrastructure
+### ☁️ Milestone 6 — Infrastructure
 
-* Docker & Helm
-* Kubernetes (EKS / AKS)
-* Terraform / Pulumi
+* Docker Compose
+* Kubernetes (EKS)
+* CI/CD
 
-### 🔭 Milestone 7 — Observability & CI/CD
+### 🔭 Milestone 7 — Observability & Hardening
 
-* GitHub Actions
-* ArgoCD
+* Sentry
 * Prometheus / Grafana
-* Sentry / OpenTelemetry
+* Load & failure testing
 
 ---
 
 ## 🤖 Parallel Development with AI Agents
 
-The project is intentionally structured so multiple AI agents can work in parallel:
+The repository is structured to enable **parallel work by multiple AI agents**:
 
-* **Frontend Agent** → UI components, performance optimization
-* **Backend Agent** → Domain logic, API contracts
-* **Infra Agent** → Kubernetes, Terraform, CI/CD
-* **AI Agent** → Prompts, RAG, model evaluation
-* **QA Agent** → Edge cases, E2E tests
+* **Architect Agent** → boundaries & trade-offs
+* **Frontend Agent** → UI, performance, UX
+* **Backend Agent** → domain logic, APIs
+* **Infra Agent** → Docker, K8s, CI/CD
+* **AI Agent** → prompts, pipelines, evaluation
+* **QA Agent** → edge cases, resilience
 
-Tools: Claude Code, Cursor, Copilot, ChatGPT
+Tools: Cursor, Claude Code, Copilot, ChatGPT
 
 ---
 
 ## 📌 What This Project Demonstrates
 
-* Senior‑level React architecture
-* Pragmatic use of modern tooling
-* Distributed systems thinking
-* Cloud‑native fundamentals
-* Responsible integration of AI
+* Senior-level React & Next.js architecture
+* Event-driven system design
+* Cloud-native thinking
+* Responsible AI integration
+* Engineering judgment & trade-offs
 
 ---
 
@@ -261,4 +276,4 @@ Tools: Claude Code, Cursor, Copilot, ChatGPT
 
 > This project is not about stacking technologies — it is about **knowing when and why to use them**.
 
-That decision‑making process is the real deliverable.
+That decision-making process is the real deliverable.
